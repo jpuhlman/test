@@ -1,0 +1,21 @@
+image: centos:8
+
+stages:
+  - build
+
+
+
+build:linux:
+  stage: build
+  tags:
+    - local
+  only: 
+    - /^.*$/
+  before_script:
+    - yum install -y epel-release
+    - yum install -y koji rpm-build lftp
+    - mkdir ~/.koji
+    - cd ~/.koji; lftp -e "mget *; exit" http://jptest07.mvista.com/kojifiles/hosts/kojiadmin/
+  script:
+    - koji list-pkgs
+  
